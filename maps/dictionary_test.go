@@ -22,18 +22,39 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	dictionary := Dictionary{}
-	dictionary.Add("test", "this is just a test")
 
-	want := "this is just a test"
-	got, err := dictionary.Search("test")
-	if err != nil {
-		t.Fatal("should find added word:", err)
-	}
+	t.Run("add normal entry", func(t *testing.T) {
+		dictionary := Dictionary{}
+		erradd := dictionary.Add("test", "this is just a test")
+		assertErrors(t, erradd, nil)
 
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
+		want := "this is just a test"
+		got, errsearch := dictionary.Search("test")
+		assertStrings(t, got, want)
+		assertErrors(t, errsearch, nil)
+	})
+	t.Run("add same entry", func(t *testing.T) {
+		dictionary := Dictionary{}
+		err1 := dictionary.Add("test", "this is just a test")
+		err2 := dictionary.Add("test", "this is just a test")
+
+		want := "this is just a test"
+		got, errsearch := dictionary.Search("test")
+		assertStrings(t, got, want)
+		assertErrors(t, err1, nil)
+		assertErrors(t, err2, KeyAlreadyExists)
+		assertErrors(t, errsearch, nil)
+	})
+	t.Run("add same entry", func(t *testing.T) {
+		dictionary := Dictionary{}
+		err := dictionary.Add("", "this is not allowed")
+
+		want := ""
+		got, errsearch := dictionary.Search("")
+		assertStrings(t, got, want)
+		assertErrors(t, err, InvalidKey)
+		assertErrors(t, errsearch, ErrNotFound)
+	})
 }
 
 func assertStrings(t *testing.T, got, want string) {
