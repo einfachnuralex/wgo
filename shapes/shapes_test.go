@@ -14,14 +14,30 @@ func TestPerimeter(t *testing.T) {
 	}
 }
 
-func TestSquareArea(t *testing.T) {
-	got := Area(Rectangle{
-		Width:  10,
-		Height: 10,
-	})
-	want := 100.0
+// table based tests
+func TestArea(t *testing.T) {
+	areaTests := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{"Rectangle", Rectangle{12, 6}, 72.0},
+		{"Circle", Circle{10}, 314.1592653589793},
+		{"Triangle", Triangle{10, 50}, 250},
+	}
+	for _, test := range areaTests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.shape.Area()
+			if got != test.want {
+				t.Errorf("got %g want %g  in %#v", got, test.want, test.shape)
+			}
+		})
+	}
+}
 
-	if got != want {
-		t.Errorf("got %.2f want %.2f", got, want)
+func BenchmarkCircle_Area(b *testing.B) {
+	circle := Circle{10}
+	for i := 0; i < b.N; i++ {
+		circle.Area()
 	}
 }
