@@ -2,14 +2,14 @@ package maps
 
 import "errors"
 
-//ErrNotFound todo
-var ErrNotFound error = errors.New("not found")
+//ErrorNotFound todo
+var ErrorNotFound error = errors.New("not found")
 
-//InvalidKey todo
-var InvalidKey error = errors.New("invalid key")
+//ErrorInvalidKey todo
+var ErrorInvalidKey error = errors.New("invalid key")
 
-//KeyAlreadyExists todo
-var KeyAlreadyExists error = errors.New("key already exists")
+//ErrorKeyAlreadyExists todo
+var ErrorKeyAlreadyExists error = errors.New("key already exists")
 
 // Dictionary bla
 type Dictionary map[string]string
@@ -18,7 +18,7 @@ type Dictionary map[string]string
 func (d Dictionary) Search(searchword string) (string, error) {
 	result, ok := d[searchword]
 	if !ok {
-		return "", ErrNotFound
+		return "", ErrorNotFound
 	}
 	return result, nil
 }
@@ -26,10 +26,10 @@ func (d Dictionary) Search(searchword string) (string, error) {
 // Add bla
 func (d Dictionary) Add(key, value string) error {
 	if key == "" {
-		return InvalidKey
+		return ErrorInvalidKey
 	}
-	if _, err := d.Search(key); err != ErrNotFound {
-		return KeyAlreadyExists
+	if _, err := d.Search(key); err != ErrorNotFound {
+		return ErrorKeyAlreadyExists
 	}
 	d[key] = value
 	return nil

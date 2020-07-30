@@ -16,7 +16,7 @@ func TestSearch(t *testing.T) {
 		got, err := dictionary.Search("unknown")
 		want := ""
 		assertStrings(t, got, want)
-		assertErrors(t, err, ErrNotFound)
+		assertErrors(t, err, ErrorNotFound)
 	})
 
 }
@@ -42,7 +42,7 @@ func TestAdd(t *testing.T) {
 		got, errsearch := dictionary.Search("test")
 		assertStrings(t, got, want)
 		assertErrors(t, err1, nil)
-		assertErrors(t, err2, KeyAlreadyExists)
+		assertErrors(t, err2, ErrorKeyAlreadyExists)
 		assertErrors(t, errsearch, nil)
 	})
 	t.Run("add same entry", func(t *testing.T) {
@@ -52,8 +52,8 @@ func TestAdd(t *testing.T) {
 		want := ""
 		got, errsearch := dictionary.Search("")
 		assertStrings(t, got, want)
-		assertErrors(t, err, InvalidKey)
-		assertErrors(t, errsearch, ErrNotFound)
+		assertErrors(t, err, ErrorInvalidKey)
+		assertErrors(t, errsearch, ErrorNotFound)
 	})
 }
 
